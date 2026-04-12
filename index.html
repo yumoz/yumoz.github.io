@@ -3,525 +3,89 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hexo</title>
-  <meta name="description" content="一个极简风格的个人博客">
-  
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
-  <style>
-    /* ========================================
-       CSS Variables & Reset
-       ======================================== */
-    :root {
-      --bg-primary: #ffffff;
-      --bg-secondary: #fafafa;
-      --text-primary: #1a1a1a;
-      --text-secondary: #666666;
-      --text-muted: #999999;
-      --border: #e5e5e5;
-      --accent: #0066cc;
-      --accent-hover: #0052a3;
-      --shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-      --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.08);
-      --radius: 12px;
-      --max-width: 680px;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      font-size: 16px;
-      line-height: 1.7;
-      color: var(--text-primary);
-      background: var(--bg-secondary);
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ========================================
-       Header
-       ======================================== */
-    header {
-      background: var(--bg-primary);
-      border-bottom: 1px solid var(--border);
-      padding: 48px 24px;
-      text-align: center;
-    }
-
-    .header-content {
-      max-width: var(--max-width);
-      margin: 0 auto;
-    }
-
-    .logo {
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--text-primary);
-      text-decoration: none;
-      letter-spacing: -0.5px;
-    }
-
-    .logo:hover {
-      color: var(--accent);
-    }
-
-    nav {
-      margin-top: 20px;
-      display: flex;
-      justify-content: center;
-      gap: 32px;
-    }
-
-    nav a {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    nav a:hover {
-      color: var(--accent);
-    }
-
-    /* ========================================
-       Main Content
-       ======================================== */
-    main {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 48px 24px;
-    }
-
-    /* ========================================
-       Article Card
-       ======================================== */
-    article {
-      background: var(--bg-primary);
-      border-radius: var(--radius);
-      padding: 40px;
-      margin-bottom: 32px;
-      box-shadow: var(--shadow);
-      transition: box-shadow 0.3s ease, transform 0.2s ease;
-    }
-
-    article:hover {
-      box-shadow: var(--shadow-hover);
-      transform: translateY(-2px);
-    }
-
-    .article-meta {
-      font-size: 13px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 16px;
-    }
-
-    .article-title {
-      font-size: 26px;
-      font-weight: 700;
-      line-height: 1.3;
-      margin-bottom: 20px;
-    }
-
-    .article-title a {
-      color: var(--text-primary);
-      text-decoration: none;
-    }
-
-    .article-title a:hover {
-      color: var(--accent);
-    }
-
-    .article-content {
-      color: var(--text-secondary);
-      font-size: 16px;
-      line-height: 1.8;
-    }
-
-    .article-content p {
-      margin-bottom: 1.5em;
-    }
-
-    .article-content a {
-      color: var(--accent);
-      text-decoration: none;
-      border-bottom: 1px solid transparent;
-      transition: border-color 0.2s;
-    }
-
-    .article-content a:hover {
-      border-bottom-color: var(--accent);
-    }
-
-    .article-content h2 {
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin: 2em 0 0.8em;
-      padding-bottom: 0.4em;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .article-content h3 {
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin: 1.8em 0 0.6em;
-    }
-
-    /* Code Blocks */
-    .highlight {
-      background: #1e1e1e;
-      border-radius: 8px;
-      margin: 1.5em 0;
-      overflow: hidden;
-    }
-
-    .highlight table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .highlight .gutter {
-      background: #252526;
-      color: #858585;
-      text-align: right;
-      padding: 16px 12px;
-      font-size: 13px;
-      font-family: 'SF Mono', Monaco, monospace;
-      user-select: none;
-      width: 48px;
-    }
-
-    .highlight .code {
-      padding: 16px 20px;
-    }
-
-    .highlight .code pre {
-      margin: 0;
-      font-size: 14px;
-      line-height: 1.6;
-      font-family: 'SF Mono', Monaco, monospace;
-      color: #d4d4d4;
-      overflow-x: auto;
-    }
-
-    /* Inline Code */
-    code {
-      background: #f0f0f0;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 0.9em;
-      font-family: 'SF Mono', Monaco, monospace;
-      color: #333;
-    }
-
-    /* ========================================
-       Article Footer
-       ======================================== */
-    .article-footer {
-      margin-top: 32px;
-      padding-top: 24px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .read-more {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    .read-more:hover {
-      color: var(--accent-hover);
-    }
-
-    .share-btn {
-      font-size: 13px;
-      color: var(--text-muted);
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 8px 16px;
-      border-radius: 6px;
-      transition: all 0.2s;
-    }
-
-    .share-btn:hover {
-      background: var(--bg-secondary);
-      color: var(--text-primary);
-    }
-
-    /* ========================================
-       Sidebar
-       ======================================== */
-    .sidebar {
-      margin-top: 48px;
-    }
-
-    .widget {
-      background: var(--bg-primary);
-      border-radius: var(--radius);
-      padding: 24px;
-      margin-bottom: 24px;
-      box-shadow: var(--shadow);
-    }
-
-    .widget-title {
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--text-muted);
-      margin-bottom: 16px;
-    }
-
-    .widget ul {
-      list-style: none;
-    }
-
-    .widget li {
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .widget li:last-child {
-      border-bottom: none;
-    }
-
-    .widget a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 14px;
-      transition: color 0.2s;
-    }
-
-    .widget a:hover {
-      color: var(--accent);
-    }
-
-    /* ========================================
-       Footer
-       ======================================== */
-    footer {
-      background: var(--bg-primary);
-      border-top: 1px solid var(--border);
-      padding: 40px 24px;
-      text-align: center;
-    }
-
-    .footer-content {
-      max-width: var(--max-width);
-      margin: 0 auto;
-    }
-
-    .footer-text {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .footer-text a {
-      color: var(--text-secondary);
-      text-decoration: none;
-    }
-
-    .footer-text a:hover {
-      color: var(--accent);
-    }
-
-    /* ========================================
-       Responsive
-       ======================================== */
-    @media (max-width: 640px) {
-      header {
-        padding: 32px 20px;
-      }
-
-      nav {
-        gap: 24px;
-      }
-
-      main {
-        padding: 32px 16px;
-      }
-
-      article {
-        padding: 24px;
-      }
-
-      .article-title {
-        font-size: 22px;
-      }
-
-      .article-content {
-        font-size: 15px;
-      }
-
-      .article-footer {
-        flex-direction: column;
-        gap: 16px;
-        align-items: flex-start;
-      }
-    }
-
-    /* ========================================
-       Animations
-       ======================================== */
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    article {
-      animation: fadeIn 0.5s ease-out;
-    }
-  </style>
+  <title>我的博客 - 记录技术与生活</title>
+  <meta name="description" content="个人技术博客，记录学习与成长">
+  <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
   <!-- Header -->
-  <header>
-    <div class="header-content">
-      <a href="/yumoz.github.io/" class="logo">Hexo</a>
-      <nav>
-        <a href="/yumoz.github.io/">首页</a>
-        <a href="/yumoz.github.io/archives">归档</a>
-      </nav>
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="./" class="site-logo">
+          <span class="logo-icon">Y</span>
+          Yumoz
+        </a>
+        <nav class="main-nav">
+          <a href="./" class="nav-link active">首页</a>
+          <a href="archives.html" class="nav-link">归档</a>
+          <a href="about.html" class="nav-link">关于</a>
+        </nav>
+      </div>
     </div>
   </header>
 
   <!-- Main Content -->
-  <main>
-    <!-- Article -->
-    <article>
-      <div class="article-meta">2021年3月27日</div>
-      <h1 class="article-title">
-        <a href="/yumoz.github.io/2021/03/27/hello-world/">Hello World</a>
-      </h1>
-      <div class="article-content">
-        <p>Welcome to <a href="https://hexo.io/" target="_blank">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank">GitHub</a>.</p>
-        
-        <h2>Quick Start</h2>
-        
-        <h3>Create a new post</h3>
-        <div class="highlight">
-          <table>
-            <tr>
-              <td class="gutter"><pre>1</pre></td>
-              <td class="code"><pre>$ hexo new "My New Post"</pre></td>
-            </tr>
-          </table>
-        </div>
-        <p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank">Writing</a></p>
-        
-        <h3>Run server</h3>
-        <div class="highlight">
-          <table>
-            <tr>
-              <td class="gutter"><pre>1</pre></td>
-              <td class="code"><pre>$ hexo server</pre></td>
-            </tr>
-          </table>
-        </div>
-        <p>More info: <a href="https://hexo.io/docs/server.html" target="_blank">Server</a></p>
-        
-        <h3>Generate static files</h3>
-        <div class="highlight">
-          <table>
-            <tr>
-              <td class="gutter"><pre>1</pre></td>
-              <td class="code"><pre>$ hexo generate</pre></td>
-            </tr>
-          </table>
-        </div>
-        <p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank">Generating</a></p>
-        
-        <h3>Deploy to remote sites</h3>
-        <div class="highlight">
-          <table>
-            <tr>
-              <td class="gutter"><pre>1</pre></td>
-              <td class="code"><pre>$ hexo deploy</pre></td>
-            </tr>
-          </table>
-        </div>
-        <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank">Deployment</a></p>
-      </div>
-      <div class="article-footer">
-        <a href="/yumoz.github.io/2021/03/27/hello-world/" class="read-more">阅读全文 →</a>
-        <button class="share-btn">分享</button>
-      </div>
-    </article>
-
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="widget">
-        <h3 class="widget-title">归档</h3>
-        <ul>
-          <li><a href="/yumoz.github.io/archives/2021/03/">2021年3月</a></li>
-        </ul>
+  <main class="main-content">
+    <div class="container">
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1 class="page-title">文章列表</h1>
+        <p class="page-subtitle">记录学习与成长</p>
       </div>
 
-      <div class="widget">
-        <h3 class="widget-title">最近文章</h3>
-        <ul>
-          <li><a href="/yumoz.github.io/2021/03/27/hello-world/">Hello World</a></li>
-        </ul>
+      <!-- Article List -->
+      <div class="article-list">
+        <article class="article-card">
+          <div class="article-header">
+            <div class="article-meta">
+              <span class="article-date">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                2021年3月27日
+              </span>
+            </div>
+            <h2 class="article-title">
+              <a href="2021/03/27/hello-world/">Hello World</a>
+            </h2>
+          </div>
+          <p class="article-excerpt">
+            Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub...
+          </p>
+          <div class="article-footer">
+            <a href="2021/03/27/hello-world/" class="read-more">
+              阅读全文
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+            <div class="tags">
+              <span class="tag">Hexo</span>
+              <span class="tag">入门</span>
+            </div>
+          </div>
+        </article>
       </div>
-    </aside>
+    </div>
   </main>
 
   <!-- Footer -->
-  <footer>
-    <div class="footer-content">
-      <p class="footer-text">
-        &copy; 2021 John Doe · 使用 <a href="https://hexo.io/" target="_blank">Hexo</a> 构建
-      </p>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <p class="footer-text">
+          &copy; 2021 Yumoz &middot; 使用 <a href="https://hexo.io/" target="_blank">Hexo</a> 构建
+        </p>
+        <p class="footer-text">
+          <a href="https://github.com/yumoz" target="_blank">GitHub</a>
+        </p>
+      </div>
     </div>
   </footer>
-
-  <script>
-    // Simple interactions
-    document.querySelectorAll('.share-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        if (navigator.share) {
-          navigator.share({
-            title: document.querySelector('.article-title').textContent,
-            url: window.location.href
-          });
-        } else {
-          // Fallback: copy to clipboard
-          navigator.clipboard.writeText(window.location.href).then(() => {
-            const originalText = this.textContent;
-            this.textContent = '已复制链接';
-            setTimeout(() => {
-              this.textContent = originalText;
-            }, 2000);
-          });
-        }
-      });
-    });
-  </script>
 </body>
 </html>
