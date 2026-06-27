@@ -2,6 +2,7 @@ import { renderHome, initHome } from './pages/home.js';
 import { renderAbout } from './pages/about.js';
 import { renderArchives } from './pages/archives.js';
 import { renderMedia } from './pages/media.js';
+import { renderTools, initTools } from './pages/tools.js';
 
 const app = document.getElementById('app');
 
@@ -10,6 +11,7 @@ const routes = {
   '/about': renderAbout,
   '/archives': renderArchives,
   '/media': renderMedia,
+  '/tools': renderTools,
 };
 
 function initTheme() {
@@ -66,6 +68,7 @@ function renderPage(path) {
   updateActiveNav(path);
   initScrollObserver();
   if (path === '/') initHome();
+  if (path === '/tools') initTools();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
