@@ -3,8 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>关于 - 我的博客</title>
+  <title>关于 - Yumoz</title>
   <meta name="description" content="关于我">
+  <link rel="preconnect" href="https://fonts.geekzu.org">
+  <link href="https://fonts.geekzu.org/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Serif+SC:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
@@ -29,13 +31,13 @@
   <main class="main-content">
     <div class="container">
       <!-- Page Header -->
-      <div class="page-header">
+      <div class="page-header animate-on-scroll">
         <h1 class="page-title">关于</h1>
         <p class="page-subtitle">了解这个博客</p>
       </div>
 
       <!-- About Content -->
-      <div class="article-full">
+      <div class="article-full animate-on-scroll">
         <div class="article-content">
           <h2>关于博客</h2>
           <p>
@@ -83,5 +85,20 @@
       </div>
     </div>
   </footer>
+  <script>
+    (function() {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.animate-on-scroll').forEach(function(el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
 </body>
 </html>
