@@ -1,6 +1,7 @@
-import { renderHome } from './pages/home.js';
+import { renderHome, initHome } from './pages/home.js';
 import { renderAbout } from './pages/about.js';
 import { renderArchives } from './pages/archives.js';
+import { renderMedia } from './pages/media.js';
 
 const app = document.getElementById('app');
 
@@ -8,6 +9,7 @@ const routes = {
   '/': renderHome,
   '/about': renderAbout,
   '/archives': renderArchives,
+  '/media': renderMedia,
 };
 
 function initTheme() {
@@ -63,6 +65,7 @@ function renderPage(path) {
   app.innerHTML = render();
   updateActiveNav(path);
   initScrollObserver();
+  if (path === '/') initHome();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 

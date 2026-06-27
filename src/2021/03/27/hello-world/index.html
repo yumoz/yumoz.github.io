@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hello World - Yumoz</title>
-  <meta name="description" content="Welcome to Hexo! This is your very first post.">
+  <title>如何使用本项目添加笔记 - Yumoz</title>
+  <meta name="description" content="介绍如何在本博客中添加和管理笔记文章">
   <link rel="preconnect" href="https://fonts.geekzu.org">
   <link href="https://fonts.geekzu.org/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Serif+SC:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css">
 </head>
 <body>
 
@@ -21,6 +22,7 @@
         <nav class="main-nav">
           <a href="/" class="nav-link">首页</a>
           <a href="/#/archives" class="nav-link">归档</a>
+          <a href="/#/media" class="nav-link">媒体</a>
           <a href="/#/about" class="nav-link">关于</a>
           <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
             <svg class="theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -45,34 +47,130 @@
 
   <main class="main-content">
     <div class="container">
-      <div class="page-header animate-on-scroll">
-        <h1 class="page-title">Hello World</h1>
+      <div class="page-header page-header--article animate-on-scroll">
+        <h1 class="page-title">如何使用本项目添加笔记</h1>
         <p class="page-subtitle">2021年03月27日</p>
       </div>
 
-      <article class="article-full animate-on-scroll">
-        <div class="article-content">
-          <p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2>Quick Start</h2>
-<h3>Create a new post</h3>
-<pre><code>$ hexo new &quot;My New Post&quot;
-</code></pre>
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3>Run server</h3>
-<pre><code>$ hexo server
-</code></pre>
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3>Generate static files</h3>
-<pre><code>$ hexo generate
-</code></pre>
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3>Deploy to remote sites</h3>
-<pre><code>$ hexo deploy
-</code></pre>
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+      <div class="article-layout">
+        <aside class="article-sidebar animate-on-scroll">
+          <div class="sidebar-tabs">
+            <button class="sidebar-tab sidebar-tab--active" data-tab="posts">文章导航</button>
+            <button class="sidebar-tab" data-tab="toc">文档导航</button>
+          </div>
+          <div class="sidebar-tab-content sidebar-tab-content--active" data-tab-content="posts">
+            <ul class="sidebar-list">
+              <li><a class="sidebar-item" href="/2026/06/27/ai-and-programming/"><span class="sidebar-date">2026/06/27</span><span class="sidebar-title">AI 如何改变我的编程方式</span></a></li>
+          <li><a class="sidebar-item" href="/2026/06/27/embed-media-guide/"><span class="sidebar-date">2026/06/27</span><span class="sidebar-title">如何在博客中嵌入媒体内容</span></a></li>
+          <li><a class="sidebar-item" href="/2026/06/27/my-understanding-of-ai/"><span class="sidebar-date">2026/06/27</span><span class="sidebar-title">我对 AI 的理解</span></a></li>
+          <li><a class="sidebar-item" href="/2026/06/27/sample-note/"><span class="sidebar-date">2026/06/27</span><span class="sidebar-title">示例笔记</span></a></li>
+          <li><a class="sidebar-item sidebar-item--active" href="/2021/03/27/hello-world/"><span class="sidebar-date">2021/03/27</span><span class="sidebar-title">如何使用本项目添加笔记</span></a></li>
+            </ul>
+          </div>
+          <div class="sidebar-tab-content" data-tab-content="toc">
+            <ul class="toc-list">
+      
+        <li class="toc-item toc-item--h2">
+          <a class="toc-link" href="#h-1" data-toc-id="h-1">快速开始</a>
+          <ul class="toc-list toc-list--nested">
+      
+        <li class="toc-item toc-item--h3">
+          <a class="toc-link" href="#h-2" data-toc-id="h-2">新建文章</a>
+          
+        </li>
+      
+        <li class="toc-item toc-item--h3">
+          <a class="toc-link" href="#h-3" data-toc-id="h-3">本地预览</a>
+          
+        </li>
+      
+        <li class="toc-item toc-item--h3">
+          <a class="toc-link" href="#h-4" data-toc-id="h-4">生产构建</a>
+          
+        </li>
+      
+        <li class="toc-item toc-item--h3">
+          <a class="toc-link" href="#h-5" data-toc-id="h-5">部署</a>
+          
+        </li>
+      
+    </ul>
+        </li>
+      
+        <li class="toc-item toc-item--h2">
+          <a class="toc-link" href="#h-6" data-toc-id="h-6">支持的语法</a>
+          
+        </li>
+      
+        <li class="toc-item toc-item--h2">
+          <a class="toc-link" href="#h-7" data-toc-id="h-7">目录结构</a>
+          
+        </li>
+      
+    </ul>
+          </div>
+        </aside>
 
-        </div>
-      </article>
+        <article class="article-full animate-on-scroll">
+          <div class="article-content">
+            <p>本博客使用 Markdown 驱动的内容管理系统。写新文章只需两步：创建 Markdown 文件，推送到 GitHub。</p>
+<h2 id="h-1">快速开始</h2>
+<h3 id="h-2">新建文章</h3>
+<p>在 <code>posts/</code> 下创建目录和 <code>index.md</code>：</p>
+<pre><code>posts/&lt;文章英文名&gt;/index.md
+</code></pre>
+<p>文件头写入 YAML 元信息：</p>
+<pre><code class="language-yaml">---
+title: 文章标题
+date: 2026-06-27
+tags: [标签1, 标签2]
+---
+</code></pre>
+<p>正文直接写 Markdown 即可。</p>
+<h3 id="h-3">本地预览</h3>
+<pre><code class="language-bash">npm install        # 首次安装依赖
+npm run dev        # 启动开发服务器（热更新）
+</code></pre>
+<p>浏览器打开 <code>http://localhost:5173</code> 即可实时预览。</p>
+<h3 id="h-4">生产构建</h3>
+<pre><code class="language-bash">npm run build      # 生成静态文件到 dist/
+npm run preview    # 预览构建结果
+</code></pre>
+<p>构建过程会自动执行以下步骤：</p>
+<ol>
+<li><code>npm run build:posts</code> — 读取 <code>posts/</code> 下所有 Markdown，转换为完整 HTML 页面</li>
+<li><code>vite build</code> — Vite 打包 SPA 和所有页面到 <code>dist/</code></li>
+</ol>
+<h3 id="h-5">部署</h3>
+<p>推送到 <code>master</code> 分支：</p>
+<pre><code class="language-bash">git add .
+git commit -m &quot;新文章：xxx&quot;
+git push origin master
+</code></pre>
+<p>GitHub Actions 自动构建并部署到 GitHub Pages，几分钟后即可在 <code>https://yumoz.github.io</code> 查看。</p>
+<h2 id="h-6">支持的语法</h2>
+<p>本项目支持标准 Markdown，以及：</p>
+<ul>
+<li><strong>代码块</strong> — 带语法高亮</li>
+<li><strong>表格</strong> — 自动添加边框和斑马纹</li>
+<li><strong>数学公式</strong> — 行内 <code>$...$</code> 和块级 <code>$$...$$</code>，构建时由 KaTeX 渲染</li>
+<li><strong>YAML 头信息</strong> — 设置标题、日期、标签</li>
+</ul>
+<h2 id="h-7">目录结构</h2>
+<pre><code>posts/                    # Markdown 源文件
+  &lt;slug&gt;/index.md         # 每篇文章一个目录
+scripts/
+  build-posts.mjs         # Markdown → HTML 构建脚本
+src/                      # Vite 源文件
+  index.html              # SPA 入口
+  css/main.css            # 主题样式
+  js/                     # SPA 路由和页面组件
+dist/                     # 构建输出（自动生成，不提交）
+</code></pre>
+
+          </div>
+        </article>
+      </div>
 
       <div class="article-card" style="text-align: center;">
         <a href="/" class="read-more">
@@ -143,6 +241,47 @@
       toggle.addEventListener('click', function() {
         setTheme(html.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
       });
+    })();
+
+    // sidebar tabs
+    (function() {
+      var tabs = document.querySelectorAll('.sidebar-tab');
+      if (!tabs.length) return;
+      tabs.forEach(function(tab) {
+        tab.addEventListener('click', function() {
+          var name = this.getAttribute('data-tab');
+          tabs.forEach(function(t) { t.classList.remove('sidebar-tab--active'); });
+          this.classList.add('sidebar-tab--active');
+          document.querySelectorAll('.sidebar-tab-content').forEach(function(c) {
+            c.classList.toggle('sidebar-tab-content--active', c.getAttribute('data-tab-content') === name);
+          });
+        });
+      });
+    })();
+
+    // toc scroll spy
+    (function() {
+      var links = document.querySelectorAll('.toc-link');
+      if (!links.length) return;
+      var items = [];
+      links.forEach(function(link) {
+        var id = link.getAttribute('data-toc-id');
+        var el = document.getElementById(id);
+        if (el) items.push({ el: el, link: link });
+      });
+      if (!items.length) return;
+      function update() {
+        var scrollY = window.scrollY + 130;
+        var active = items[0];
+        for (var i = 0; i < items.length; i++) {
+          if (items[i].el.offsetTop <= scrollY) active = items[i];
+          else break;
+        }
+        links.forEach(function(l) { l.classList.remove('toc-link--active'); });
+        active.link.classList.add('toc-link--active');
+      }
+      window.addEventListener('scroll', update);
+      update();
     })();
   </script>
 

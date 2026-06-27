@@ -12,7 +12,9 @@
   },
   "devDependencies": {
     "gray-matter": "^4.0.3",
+    "katex": "^0.17.0",
     "marked": "^18.0.5",
+    "marked-katex-extension": "^5.1.10",
     "vite": "^6.3.0"
   }
 }

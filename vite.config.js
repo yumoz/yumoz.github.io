@@ -25,6 +25,7 @@ const input = existsSync(srcDir) ? findHtmlEntries(srcDir) : {}
 export default defineConfig({
   root: 'src',
   base: '/',
+  publicDir: '../public',
   build: {
     outDir: '../dist',
     emptyOutDir: true,

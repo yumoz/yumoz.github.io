@@ -12,7 +12,7 @@ export function renderAbout() {
             <h2>关于博客</h2>
             <p>
               这是一个个人技术博客，用于记录学习过程中的笔记和心得。
-              博客使用 Hexo 静态网站生成器构建，托管在 GitHub Pages 上。
+              博客基于 Vite 构建，使用 Markdown 驱动内容，托管在 GitHub Pages 上。
             </p>
 
             <h2>关于我</h2>
@@ -23,10 +23,11 @@ export function renderAbout() {
 
             <h2>技术栈</h2>
             <ul>
-              <li><strong>前端</strong>: HTML, CSS, JavaScript</li>
-              <li><strong>博客框架</strong>: Hexo</li>
-              <li><strong>主题</strong>: 自定义主题</li>
-              <li><strong>托管</strong>: GitHub Pages</li>
+              <li><strong>构建工具</strong>: Vite 6</li>
+              <li><strong>内容</strong>: Markdown + marked + gray-matter</li>
+              <li><strong>数学</strong>: KaTeX（构建时渲染）</li>
+              <li><strong>主题</strong>: 自定义暗色琥珀主题</li>
+              <li><strong>托管</strong>: GitHub Pages + Actions</li>
             </ul>
 
             <h2>联系方式</h2>
