@@ -77,6 +77,48 @@ window.addEventListener('hashchange', function () {
   renderPage(path);
 });
 
+function initHamburger() {
+  var btn = document.getElementById('hamburgerBtn');
+  var menu = document.getElementById('hamburgerMenu');
+  var backdrop = document.getElementById('hamburgerBackdrop');
+  var closeBtn = document.getElementById('hamburgerClose');
+  if (!btn || !menu) return;
+
+  function open() {
+    menu.classList.add('hamburger-menu--open');
+    btn.classList.add('hamburger-btn--open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    menu.classList.remove('hamburger-menu--open');
+    btn.classList.remove('hamburger-btn--open');
+    document.body.style.overflow = '';
+  }
+
+  btn.addEventListener('click', function () {
+    if (menu.classList.contains('hamburger-menu--open')) {
+      close();
+    } else {
+      open();
+    }
+  });
+
+  if (backdrop) backdrop.addEventListener('click', close);
+  if (closeBtn) closeBtn.addEventListener('click', close);
+
+  // Close when a nav link is clicked
+  menu.querySelectorAll('.nav-link').forEach(function (link) {
+    link.addEventListener('click', close);
+  });
+
+  // Close on ESC
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && menu.classList.contains('hamburger-menu--open')) close();
+  });
+}
+
 const initialPath = location.hash.slice(1) || '/';
 renderPage(initialPath);
 initTheme();
+initHamburger();

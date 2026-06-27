@@ -570,6 +570,13 @@ export function initTools() {
     return canvas;
   }
 
+  function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+
+  function ts() {
+    var d = new Date();
+    return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()) + '_' + pad2(d.getHours()) + pad2(d.getMinutes()) + pad2(d.getSeconds());
+  }
+
   function downloadBlob(blob, filename) {
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
@@ -584,7 +591,8 @@ export function initTools() {
   $('exportPngBtn').addEventListener('click', function () {
     var canvas = getExportComposite(3);
     if (!canvas) return;
-    canvas.toBlob(function (blob) { downloadBlob(blob, 'bead-pattern.png'); });
+    var stamp = ts();
+    canvas.toBlob(function (blob) { downloadBlob(blob, 'bead-pattern-' + stamp + '.png'); });
   });
 
   $('exportCsvBtn').addEventListener('click', function () {
@@ -605,7 +613,7 @@ export function initTools() {
       if (c) lines.push(code + ',' + c.hex + ',' + c.r + ',' + c.g + ',' + c.b + ',' + count[code]);
     });
     var blob = new Blob([lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
-    downloadBlob(blob, 'bead-material-list.csv');
+    downloadBlob(blob, 'bead-material-list-' + ts() + '.csv');
   });
 
   $('exportPrintBtn').addEventListener('click', function () {
