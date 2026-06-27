@@ -3,11 +3,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "npm run build:posts && vite",
+    "build": "npm run build:posts && vite build",
+    "preview": "vite preview",
+    "build:posts": "node scripts/build-posts.mjs",
+    "dev:no-posts": "vite",
+    "build:no-posts": "vite build"
   },
   "devDependencies": {
+    "gray-matter": "^4.0.3",
+    "marked": "^18.0.5",
     "vite": "^6.3.0"
   }
 }

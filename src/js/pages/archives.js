@@ -1,5 +1,16 @@
+import { posts } from '../posts-data.js'
+
 export function renderArchives() {
-  return `
+  const grouped = {}
+  for (const post of posts) {
+    const year = post.date.slice(0, 4)
+    if (!grouped[year]) grouped[year] = []
+    grouped[year].push(post)
+  }
+
+  const years = Object.keys(grouped).sort((a, b) => b.localeCompare(a))
+
+  let html = `
     <div class="main-content">
       <div class="container">
         <div class="page-header">
@@ -8,19 +19,36 @@ export function renderArchives() {
         </div>
 
         <div class="archive-list-container">
+  `
+
+  for (const year of years) {
+    const monthDay = (d) => {
+      const m = d.slice(5, 7)
+      const day = d.slice(8, 10)
+      return `${parseInt(m)}月${parseInt(day)}日`
+    }
+    html += `
           <div class="archive-year">
-            <h2 class="archive-year-title">2021</h2>
+            <h2 class="archive-year-title">${year}</h2>
             <ul class="archive-list">
-              <li class="archive-item">
-                <span class="archive-date">3月27日</span>
-                <span class="archive-title">
-                  <a href="2021/03/27/hello-world/">Hello World</a>
-                </span>
-              </li>
+              ${grouped[year].map(p => `
+                <li class="archive-item">
+                  <span class="archive-date">${monthDay(p.date)}</span>
+                  <span class="archive-title">
+                    <a href="${p.url}">${p.title}</a>
+                  </span>
+                </li>
+              `).join('')}
             </ul>
           </div>
+    `
+  }
+
+  html += `
         </div>
       </div>
     </div>
-  `;
+  `
+
+  return html
 }

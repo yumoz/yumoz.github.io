@@ -1,10 +1,94 @@
-<!DOCTYPE html>
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, unlinkSync, rmdirSync, rmSync } from 'fs'
+import { join, dirname } from 'path'
+import { marked } from 'marked'
+import matter from 'gray-matter'
+
+const ROOT = join(import.meta.dirname, '..')
+const SRC = join(ROOT, 'src')
+const POSTS = join(ROOT, 'posts')
+const DATA_FILE = join(SRC, 'js', 'posts-data.js')
+const MANIFEST = join(SRC, '.posts-manifest.json')
+
+if (!existsSync(POSTS)) {
+  writeFileSync(DATA_FILE, 'export const posts = []\n', 'utf-8')
+  writeFileSync(MANIFEST, '[]', 'utf-8')
+  process.exit(0)
+}
+
+// read current manifest
+let previous = []
+try { previous = JSON.parse(readFileSync(MANIFEST, 'utf-8')) } catch {}
+
+const entries = readdirSync(POSTS, { withFileTypes: true })
+const generated = []
+const postsMeta = []
+
+for (const entry of entries) {
+  if (!entry.isDirectory()) continue
+  const slug = entry.name
+  const mdPath = join(POSTS, slug, 'index.md')
+  if (!existsSync(mdPath)) continue
+
+  const raw = readFileSync(mdPath, 'utf-8')
+  const { data, content } = matter(raw)
+
+  const title = data.title || slug
+  const date = data.date ? new Date(data.date) : new Date()
+  const tags = data.tags || []
+  const description = data.description || title
+
+  const yyyy = String(date.getFullYear())
+  const mm = String(date.getMonth() + 1).padStart(2, '0')
+  const dd = String(date.getDate()).padStart(2, '0')
+
+  const bodyHtml = marked.parse(content)
+
+  const html = buildPage({ title, description, date, yyyy, mm, dd, slug, bodyHtml })
+  const outDir = join(SRC, yyyy, mm, dd, slug)
+  mkdirSync(outDir, { recursive: true })
+  writeFileSync(join(outDir, 'index.html'), html, 'utf-8')
+
+  generated.push(join(yyyy, mm, dd, slug, 'index.html'))
+  postsMeta.push({ title, date: `${yyyy}-${mm}-${dd}`, slug, url: `/${yyyy}/${mm}/${dd}/${slug}/`, tags })
+}
+
+// sort newest first
+postsMeta.sort((a, b) => b.date.localeCompare(a.date))
+
+// write data module
+const dataCode = `export const posts = ${JSON.stringify(postsMeta, null, 2)}\n`
+writeFileSync(DATA_FILE, dataCode, 'utf-8')
+
+// clean orphaned files
+for (const file of previous) {
+  if (!generated.includes(file)) {
+    const fullPath = join(SRC, file)
+    if (existsSync(fullPath)) {
+      unlinkSync(fullPath)
+      // clean empty parent dirs
+      let dir = dirname(fullPath)
+      while (dir !== SRC) {
+        try {
+          const children = readdirSync(dir)
+          if (children.length === 0) { rmdirSync(dir); dir = dirname(dir) }
+          else break
+        } catch { break }
+      }
+    }
+  }
+}
+
+writeFileSync(MANIFEST, JSON.stringify(generated, null, 2), 'utf-8')
+
+function buildPage({ title, description, date, yyyy, mm, dd, slug, bodyHtml }) {
+  const dateStr = `${yyyy}年${mm}月${dd}日`
+  return `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hello World - Yumoz</title>
-  <meta name="description" content="Welcome to Hexo! This is your very first post.">
+  <title>${title} - Yumoz</title>
+  <meta name="description" content="${description}">
   <link rel="preconnect" href="https://fonts.geekzu.org">
   <link href="https://fonts.geekzu.org/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Serif+SC:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/main.css">
@@ -19,10 +103,10 @@
           Yumoz
         </a>
         <nav class="main-nav">
-          <a href="/" class="nav-link">首页</a>
-          <a href="/#/archives" class="nav-link">归档</a>
-          <a href="/#/about" class="nav-link">关于</a>
-          <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+          <a href="/" class="nav-link">\u9996\u9875</a>
+          <a href="/#/archives" class="nav-link">\u5F52\u6863</a>
+          <a href="/#/about" class="nav-link">\u5173\u4E8E</a>
+          <button class="theme-toggle" id="themeToggle" aria-label="\u5207\u6362\u4E3B\u9898">
             <svg class="theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="5"></circle>
               <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -46,31 +130,13 @@
   <main class="main-content">
     <div class="container">
       <div class="page-header animate-on-scroll">
-        <h1 class="page-title">Hello World</h1>
-        <p class="page-subtitle">2021年03月27日</p>
+        <h1 class="page-title">${title}</h1>
+        <p class="page-subtitle">${dateStr}</p>
       </div>
 
       <article class="article-full animate-on-scroll">
         <div class="article-content">
-          <p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2>Quick Start</h2>
-<h3>Create a new post</h3>
-<pre><code>$ hexo new &quot;My New Post&quot;
-</code></pre>
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3>Run server</h3>
-<pre><code>$ hexo server
-</code></pre>
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3>Generate static files</h3>
-<pre><code>$ hexo generate
-</code></pre>
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3>Deploy to remote sites</h3>
-<pre><code>$ hexo deploy
-</code></pre>
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
+          ${bodyHtml}
         </div>
       </article>
 
@@ -80,7 +146,7 @@
             <line x1="19" y1="12" x2="5" y2="12"></line>
             <polyline points="12 19 5 12 12 5"></polyline>
           </svg>
-          返回首页
+          \u8FD4\u56DE\u9996\u9875
         </a>
       </div>
     </div>
@@ -90,7 +156,7 @@
     <div class="container">
       <div class="footer-inner">
         <p class="footer-text">
-          &copy; 2021 Yumoz
+          &copy; ${yyyy} Yumoz
         </p>
         <p class="footer-text">
           <a href="https://github.com/yumoz" target="_blank">GitHub</a>
@@ -99,7 +165,7 @@
           <span class="footer-sep">&middot;</span>
           <a href="https://blog.csdn.net/qq_37857219" target="_blank">CSDN</a>
           <span class="footer-sep">&middot;</span>
-          <a href="https://www.cnblogs.com/yumoz/" target="_blank">博客园</a>
+          <a href="https://www.cnblogs.com/yumoz/" target="_blank">\u535A\u5BA2\u56ED</a>
         </p>
       </div>
     </div>
@@ -147,4 +213,5 @@
   </script>
 
 </body>
-</html>
+</html>`
+}

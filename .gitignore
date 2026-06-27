@@ -1,2 +1,5 @@
 node_modules
 dist
+src/js/posts-data.js
+src/.posts-manifest.json
+src/20??/
