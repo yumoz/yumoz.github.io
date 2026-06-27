@@ -1215,6 +1215,17 @@ a:hover {
   color: var(--accent);
 }
 
+/* override mobile hidden state for sidebar cloned into overlay */
+.nav-overlay-body .article-sidebar {
+  display: block !important;
+  position: static !important;
+  flex: none !important;
+  width: 100% !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  max-height: none !important;
+}
+
 [data-theme="light"] .nav-overlay-inner {
   background: var(--bg-primary);
 }

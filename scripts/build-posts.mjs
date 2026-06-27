@@ -377,8 +377,11 @@ function buildPage({ title, description, date, yyyy, mm, dd, slug, bodyHtml, pos
         // clone sidebar content into overlay
         body.innerHTML = '';
         var clone = sidebar.cloneNode(true);
-        // remove animate-on-scroll from clone
+        // remove animate-on-scroll from clone and all descendants
         clone.classList.remove('animate-on-scroll');
+        clone.querySelectorAll('.animate-on-scroll').forEach(function(el) {
+          el.classList.remove('animate-on-scroll');
+        });
         body.appendChild(clone);
 
         // rebind tab clicks in overlay
