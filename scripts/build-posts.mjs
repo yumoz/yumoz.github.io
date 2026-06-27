@@ -271,6 +271,28 @@ function buildPage({ title, description, date, yyyy, mm, dd, slug, bodyHtml, pos
     <div class="toc-context-item" data-action="expand-level" data-level="3">\u5C55\u5F00\u5230\u7B2C\u4E09\u7EA7</div>
   </div>
 
+  <button class="nav-fab" id="navFab" aria-label="\u5BFC\u822A">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </button>
+
+  <div class="nav-overlay" id="navOverlay">
+    <div class="nav-overlay-inner">
+      <div class="nav-overlay-header">
+        <span class="nav-overlay-title">\u5BFC\u822A</span>
+        <button class="nav-overlay-close" id="navOverlayClose" aria-label="\u5173\u95ED">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="nav-overlay-body" id="navOverlayBody"></div>
+    </div>
+  </div>
+
   <script>
     (function() {
       var observer = new IntersectionObserver(function(entries) {
@@ -337,6 +359,69 @@ function buildPage({ title, description, date, yyyy, mm, dd, slug, bodyHtml, pos
           if (!item) return;
           item.classList.toggle('toc-collapsed');
         });
+      });
+    })();
+
+    // mobile nav overlay
+    (function() {
+      var fab = document.getElementById('navFab');
+      var overlay = document.getElementById('navOverlay');
+      var closeBtn = document.getElementById('navOverlayClose');
+      var body = document.getElementById('navOverlayBody');
+      if (!fab || !overlay || !closeBtn || !body) return;
+
+      var sidebar = document.querySelector('.article-sidebar');
+      if (!sidebar) return;
+
+      function openNav() {
+        // clone sidebar content into overlay
+        body.innerHTML = '';
+        var clone = sidebar.cloneNode(true);
+        // remove animate-on-scroll from clone
+        clone.classList.remove('animate-on-scroll');
+        body.appendChild(clone);
+
+        // rebind tab clicks in overlay
+        var tabs = body.querySelectorAll('.sidebar-tab');
+        tabs.forEach(function(tab) {
+          tab.addEventListener('click', function() {
+            var name = this.getAttribute('data-tab');
+            tabs.forEach(function(t) { t.classList.remove('sidebar-tab--active'); });
+            this.classList.add('sidebar-tab--active');
+            body.querySelectorAll('.sidebar-tab-content').forEach(function(c) {
+              c.classList.toggle('sidebar-tab-content--active', c.getAttribute('data-tab-content') === name);
+            });
+          });
+        });
+
+        // rebind toc toggles in overlay
+        var toggles = body.querySelectorAll('.toc-toggle:not(.toc-toggle--spacer)');
+        toggles.forEach(function(btn) {
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            var item = this.closest('.toc-item');
+            if (item) item.classList.toggle('toc-collapsed');
+          });
+        });
+
+        // close overlay when clicking a nav link
+        body.querySelectorAll('a').forEach(function(link) {
+          link.addEventListener('click', function() {
+            overlay.classList.remove('nav-overlay--open');
+          });
+        });
+
+        overlay.classList.add('nav-overlay--open');
+      }
+
+      fab.addEventListener('click', openNav);
+      closeBtn.addEventListener('click', function() {
+        overlay.classList.remove('nav-overlay--open');
+      });
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) {
+          overlay.classList.remove('nav-overlay--open');
+        }
       });
     })();
 
