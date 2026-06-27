@@ -13,11 +13,15 @@ A personal blog hosted on GitHub Pages. Built with **Vite** (multi-page). Source
 ## Structure
 
 ```
-src/                  # Vite root — HTML, CSS source
-  index.html          # Home page (modern theme)
-  about.html          # About page
-  archives.html       # Archives (modern theme)
-  2021/03/27/hello-world/index.html  # Blog post
+src/                  # Vite root — HTML, CSS, JS source
+  index.html          # Single SPA entry point (hash routing)
+  js/
+    main.js           # Router, theme toggle, scroll observer
+    pages/
+      home.js         # Home page content
+      about.js        # About page content
+      archives.js     # Archives page content
+  2021/03/27/hello-world/index.html  # Blog post (standalone entry)
   css/main.css        # Modern theme CSS (dark amber editorial)
 public/               # Copied as-is to dist/
   css/style.css       # Legacy Hexo theme (for old archive pages)
@@ -32,17 +36,17 @@ dist/                 # Build output (gitignored)
 
 ## Key quirks
 
-- **Dual theme**: `src/` pages use a custom dark amber theme (`css/main.css`). Pages under `archives/` use the original Hexo default theme (`css/style.css` in `public/`). Any new page should go in `src/` and use `css/main.css`.
-- **Two archives pages**: `src/archives.html` (modern theme) is the canonical one. `archives/index.html` (Hexo-generated, old theme) is a dead end — do not link to it.
+- **SPA**: about and archives are JS modules rendered into `#app` via hash routing (`#/`, `#/about`, `#/archives`). The blog post (`/2021/03/27/hello-world/`) is a standalone static page.
+- **Dual theme**: `src/` pages use a custom dark amber theme (`css/main.css`). Pages under `archives/` use the original Hexo default theme (`css/style.css` in `public/`).
 - **Broken paths in legacy pages**: Pages under `archives/` have hardcoded paths with an incorrect `yumoz.github.io.git/` prefix. Fix these if touched.
 - **No `.nojekyll`** — add it if underscore-prefixed directories are introduced.
 - **All assets are vendored** in `public/` (jQuery, Fancybox, FontAwesome fonts) — no CDN dependencies except the legacy archive pages.
 
 ## Adding content
 
-- Add new HTML in `src/` and register it in `vite.config.js` `rollupOptions.input`.
-- Copy an existing modern-themed page as a template.
-- Reference `css/main.css` (not `css/style.css`). Relative path from any depth works (Vite resolves it).
+- Add a new page: create a render function in `src/js/pages/` and register it in `src/js/main.js` routes.
+- OR add a new standalone HTML page in `src/` and register it in `vite.config.js` `rollupOptions.input`.
+- Reference `css/main.css` (not `css/style.css`). Vite resolves relative paths from any depth.
 - Use the nav bar pattern from `src/index.html`.
 - Include the Google Fonts `<link>` tags from `src/index.html` in `<head>` — the CSS depends on them.
 - Static files (images, vendor JS) go in `public/` and are referenced with absolute paths (`/js/...`).
