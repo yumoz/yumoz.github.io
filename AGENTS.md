@@ -2,7 +2,7 @@
 
 ## What this is
 
-A personal blog hosted on GitHub Pages. Built with **Vite** (multi-page). Source in `src/`, static assets in `public/`, output in `dist/`.
+A personal blog hosted on GitHub Pages. Built with **Vite** (multi-page). Source in `src/`, output in `dist/`.
 
 ## Commands
 
@@ -23,13 +23,6 @@ src/                  # Vite root — HTML, CSS, JS source
       archives.js     # Archives page content
   2021/03/27/hello-world/index.html  # Blog post (standalone entry)
   css/main.css        # Modern theme CSS (dark amber editorial)
-public/               # Copied as-is to dist/
-  css/style.css       # Legacy Hexo theme (for old archive pages)
-  css/fonts/          # FontAwesome webfonts
-  css/images/         # banner.jpg
-  fancybox/           # jQuery Fancybox lightbox
-  js/                 # jQuery 3.4.1, script.js
-archives/             # Legacy Hexo-generated archive pages (old theme)
 .github/workflows/    # CI: builds with Vite, deploys to GitHub Pages
 dist/                 # Build output (gitignored)
 ```
@@ -37,19 +30,15 @@ dist/                 # Build output (gitignored)
 ## Key quirks
 
 - **SPA**: about and archives are JS modules rendered into `#app` via hash routing (`#/`, `#/about`, `#/archives`). The blog post (`/2021/03/27/hello-world/`) is a standalone static page.
-- **Dual theme**: `src/` pages use a custom dark amber theme (`css/main.css`). Pages under `archives/` use the original Hexo default theme (`css/style.css` in `public/`).
-- **Broken paths in legacy pages**: Pages under `archives/` have hardcoded paths with an incorrect `yumoz.github.io.git/` prefix. Fix these if touched.
 - **No `.nojekyll`** — add it if underscore-prefixed directories are introduced.
-- **All assets are vendored** in `public/` (jQuery, Fancybox, FontAwesome fonts) — no CDN dependencies except the legacy archive pages.
 
 ## Adding content
 
 - Add a new page: create a render function in `src/js/pages/` and register it in `src/js/main.js` routes.
 - OR add a new standalone HTML page in `src/` and register it in `vite.config.js` `rollupOptions.input`.
-- Reference `css/main.css` (not `css/style.css`). Vite resolves relative paths from any depth.
+- Reference `css/main.css`. Vite resolves relative paths from any depth.
 - Use the nav bar pattern from `src/index.html`.
 - Include the Google Fonts `<link>` tags from `src/index.html` in `<head>` — the CSS depends on them.
-- Static files (images, vendor JS) go in `public/` and are referenced with absolute paths (`/js/...`).
 
 ## Deploy
 
