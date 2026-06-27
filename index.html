@@ -22,6 +22,22 @@
           <a href="./" class="nav-link active">首页</a>
           <a href="archives.html" class="nav-link">归档</a>
           <a href="about.html" class="nav-link">关于</a>
+          <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+            <svg class="theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="theme-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
         </nav>
       </div>
     </div>
@@ -39,52 +55,6 @@
           <p class="hero-description">
             欢迎访问我的博客，感谢收藏，常来
           </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="links-section">
-      <div class="container">
-        <div class="section-label animate-on-scroll">友情链接</div>
-        <div class="link-grid">
-          <a href="https://blog.csdn.net/qq_37857219" target="_blank" class="link-card animate-on-scroll" style="--card-index: 1;">
-            <div class="link-card-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                <line x1="8" y1="21" x2="16" y2="21"></line>
-                <line x1="12" y1="17" x2="12" y2="21"></line>
-              </svg>
-            </div>
-            <div class="link-card-content">
-              <h3 class="link-card-title">CSDN 博客</h3>
-              <p class="link-card-desc">技术文章 · 学习笔记</p>
-            </div>
-          </a>
-          <a href="https://www.cnblogs.com/yumoz/" target="_blank" class="link-card animate-on-scroll" style="--card-index: 2;">
-            <div class="link-card-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                <path d="M2 17l10 5 10-5"></path>
-                <path d="M2 12l10 5 10-5"></path>
-              </svg>
-            </div>
-            <div class="link-card-content">
-              <h3 class="link-card-title">博客园</h3>
-              <p class="link-card-desc">随笔 · 分享</p>
-            </div>
-          </a>
-          <a href="https://gitee.com/yumoz/" target="_blank" class="link-card animate-on-scroll" style="--card-index: 3;">
-            <div class="link-card-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="16 18 22 12 16 6"></polyline>
-                <polyline points="8 6 2 12 8 18"></polyline>
-              </svg>
-            </div>
-            <div class="link-card-content">
-              <h3 class="link-card-title">Gitee</h3>
-              <p class="link-card-desc">代码仓库 · 开源项目</p>
-            </div>
-          </a>
         </div>
       </div>
     </section>
@@ -173,6 +143,31 @@
 
       document.querySelectorAll('.animate-on-scroll').forEach(function(el) {
         observer.observe(el);
+      });
+    })();
+
+    (function() {
+      var toggle = document.getElementById('themeToggle');
+      if (!toggle) return;
+      var html = document.documentElement;
+      var sun = toggle.querySelector('.theme-icon-sun');
+      var moon = toggle.querySelector('.theme-icon-moon');
+      function setTheme(theme) {
+        if (theme === 'light') {
+          html.setAttribute('data-theme', 'light');
+          sun.style.display = 'none';
+          moon.style.display = '';
+        } else {
+          html.removeAttribute('data-theme');
+          sun.style.display = '';
+          moon.style.display = 'none';
+        }
+        localStorage.setItem('theme', theme);
+      }
+      var saved = localStorage.getItem('theme');
+      if (saved) setTheme(saved);
+      toggle.addEventListener('click', function() {
+        setTheme(html.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
       });
     })();
   </script>
