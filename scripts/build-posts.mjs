@@ -128,12 +128,16 @@ function buildTOCTree(headings) {
 function renderTOC(children, depth) {
   if (!children.length) return ''
   return `<ul class="toc-list${depth > 0 ? ' toc-list--nested' : ''}">
-      ${children.map(c => `
-        <li class="toc-item toc-item--h${c.level}">
-          <a class="toc-link" href="#${c.id}" data-toc-id="${c.id}">${c.text}</a>
+      ${children.map(c => {
+        const hasChildren = c.children.length > 0
+        return `<li class="toc-item toc-item--h${c.level}" data-level="${c.level}">
+          <div class="toc-entry">
+            ${hasChildren ? '<button class="toc-toggle" aria-label="展开/折叠"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2.5 3L4 5.5L5.5 3"/></svg></button>' : '<span class="toc-toggle toc-toggle--spacer"></span>'}
+            <a class="toc-link" href="#${c.id}" data-toc-id="${c.id}">${c.text}</a>
+          </div>
           ${renderTOC(c.children, depth + 1)}
-        </li>
-      `).join('')}
+        </li>`
+      }).join('')}
     </ul>`
 }
 
@@ -259,6 +263,14 @@ function buildPage({ title, description, date, yyyy, mm, dd, slug, bodyHtml, pos
     </div>
   </footer>
 
+  <div class="toc-context-menu" id="tocContextMenu" style="display:none">
+    <div class="toc-context-item" data-action="expand-all">\u5168\u90E8\u5C55\u5F00</div>
+    <div class="toc-context-item" data-action="collapse-all">\u5168\u90E8\u6298\u53E0</div>
+    <div class="toc-context-divider"></div>
+    <div class="toc-context-item" data-action="expand-level" data-level="2">\u5C55\u5F00\u5230\u7B2C\u4E8C\u7EA7</div>
+    <div class="toc-context-item" data-action="expand-level" data-level="3">\u5C55\u5F00\u5230\u7B2C\u4E09\u7EA7</div>
+  </div>
+
   <script>
     (function() {
       var observer = new IntersectionObserver(function(entries) {
@@ -315,6 +327,19 @@ function buildPage({ title, description, date, yyyy, mm, dd, slug, bodyHtml, pos
       });
     })();
 
+    // toc toggle
+    (function() {
+      var toggles = document.querySelectorAll('.toc-toggle:not(.toc-toggle--spacer)');
+      toggles.forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var item = this.closest('.toc-item');
+          if (!item) return;
+          item.classList.toggle('toc-collapsed');
+        });
+      });
+    })();
+
     // toc scroll spy
     (function() {
       var links = document.querySelectorAll('.toc-link');
@@ -335,9 +360,58 @@ function buildPage({ title, description, date, yyyy, mm, dd, slug, bodyHtml, pos
         }
         links.forEach(function(l) { l.classList.remove('toc-link--active'); });
         active.link.classList.add('toc-link--active');
+        // expand parent items so active link is visible
+        var parent = active.link.closest('.toc-item');
+        while (parent) {
+          parent.classList.remove('toc-collapsed');
+          parent = parent.parentElement ? parent.parentElement.closest('.toc-item') : null;
+        }
       }
       window.addEventListener('scroll', update);
       update();
+    })();
+
+    // toc context menu
+    (function() {
+      var toc = document.querySelector('[data-tab-content="toc"]');
+      var menu = document.getElementById('tocContextMenu');
+      if (!toc || !menu) return;
+
+      toc.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        menu.style.display = 'block';
+        menu.style.left = Math.min(e.clientX, window.innerWidth - 200) + 'px';
+        menu.style.top = e.clientY + 'px';
+      });
+
+      document.addEventListener('click', function() {
+        menu.style.display = 'none';
+      });
+
+      document.querySelectorAll('.toc-context-item').forEach(function(item) {
+        item.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var action = this.getAttribute('data-action');
+          var level = parseInt(this.getAttribute('data-level'));
+          menu.style.display = 'none';
+
+          var items = toc.querySelectorAll('.toc-item');
+          if (action === 'expand-all') {
+            items.forEach(function(it) { it.classList.remove('toc-collapsed'); });
+          } else if (action === 'collapse-all') {
+            items.forEach(function(it) { it.classList.add('toc-collapsed'); });
+          } else if (action === 'expand-level') {
+            items.forEach(function(it) {
+              var lvl = parseInt(it.getAttribute('data-level'));
+              if (lvl <= level) {
+                it.classList.remove('toc-collapsed');
+              } else {
+                it.classList.add('toc-collapsed');
+              }
+            });
+          }
+        });
+      });
     })();
   </script>
 

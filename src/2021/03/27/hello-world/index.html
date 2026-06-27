@@ -69,44 +69,51 @@
           </div>
           <div class="sidebar-tab-content" data-tab-content="toc">
             <ul class="toc-list">
-      
-        <li class="toc-item toc-item--h2">
-          <a class="toc-link" href="#h-1" data-toc-id="h-1">快速开始</a>
+      <li class="toc-item toc-item--h2" data-level="2">
+          <div class="toc-entry">
+            <button class="toc-toggle" aria-label="展开/折叠"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2.5 3L4 5.5L5.5 3"/></svg></button>
+            <a class="toc-link" href="#h-1" data-toc-id="h-1">快速开始</a>
+          </div>
           <ul class="toc-list toc-list--nested">
-      
-        <li class="toc-item toc-item--h3">
-          <a class="toc-link" href="#h-2" data-toc-id="h-2">新建文章</a>
+      <li class="toc-item toc-item--h3" data-level="3">
+          <div class="toc-entry">
+            <span class="toc-toggle toc-toggle--spacer"></span>
+            <a class="toc-link" href="#h-2" data-toc-id="h-2">新建文章</a>
+          </div>
+          
+        </li><li class="toc-item toc-item--h3" data-level="3">
+          <div class="toc-entry">
+            <span class="toc-toggle toc-toggle--spacer"></span>
+            <a class="toc-link" href="#h-3" data-toc-id="h-3">本地预览</a>
+          </div>
+          
+        </li><li class="toc-item toc-item--h3" data-level="3">
+          <div class="toc-entry">
+            <span class="toc-toggle toc-toggle--spacer"></span>
+            <a class="toc-link" href="#h-4" data-toc-id="h-4">生产构建</a>
+          </div>
+          
+        </li><li class="toc-item toc-item--h3" data-level="3">
+          <div class="toc-entry">
+            <span class="toc-toggle toc-toggle--spacer"></span>
+            <a class="toc-link" href="#h-5" data-toc-id="h-5">部署</a>
+          </div>
           
         </li>
-      
-        <li class="toc-item toc-item--h3">
-          <a class="toc-link" href="#h-3" data-toc-id="h-3">本地预览</a>
-          
-        </li>
-      
-        <li class="toc-item toc-item--h3">
-          <a class="toc-link" href="#h-4" data-toc-id="h-4">生产构建</a>
-          
-        </li>
-      
-        <li class="toc-item toc-item--h3">
-          <a class="toc-link" href="#h-5" data-toc-id="h-5">部署</a>
-          
-        </li>
-      
     </ul>
-        </li>
-      
-        <li class="toc-item toc-item--h2">
-          <a class="toc-link" href="#h-6" data-toc-id="h-6">支持的语法</a>
+        </li><li class="toc-item toc-item--h2" data-level="2">
+          <div class="toc-entry">
+            <span class="toc-toggle toc-toggle--spacer"></span>
+            <a class="toc-link" href="#h-6" data-toc-id="h-6">支持的语法</a>
+          </div>
+          
+        </li><li class="toc-item toc-item--h2" data-level="2">
+          <div class="toc-entry">
+            <span class="toc-toggle toc-toggle--spacer"></span>
+            <a class="toc-link" href="#h-7" data-toc-id="h-7">目录结构</a>
+          </div>
           
         </li>
-      
-        <li class="toc-item toc-item--h2">
-          <a class="toc-link" href="#h-7" data-toc-id="h-7">目录结构</a>
-          
-        </li>
-      
     </ul>
           </div>
         </aside>
@@ -203,6 +210,14 @@ dist/                     # 构建输出（自动生成，不提交）
     </div>
   </footer>
 
+  <div class="toc-context-menu" id="tocContextMenu" style="display:none">
+    <div class="toc-context-item" data-action="expand-all">全部展开</div>
+    <div class="toc-context-item" data-action="collapse-all">全部折叠</div>
+    <div class="toc-context-divider"></div>
+    <div class="toc-context-item" data-action="expand-level" data-level="2">展开到第二级</div>
+    <div class="toc-context-item" data-action="expand-level" data-level="3">展开到第三级</div>
+  </div>
+
   <script>
     (function() {
       var observer = new IntersectionObserver(function(entries) {
@@ -259,6 +274,19 @@ dist/                     # 构建输出（自动生成，不提交）
       });
     })();
 
+    // toc toggle
+    (function() {
+      var toggles = document.querySelectorAll('.toc-toggle:not(.toc-toggle--spacer)');
+      toggles.forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var item = this.closest('.toc-item');
+          if (!item) return;
+          item.classList.toggle('toc-collapsed');
+        });
+      });
+    })();
+
     // toc scroll spy
     (function() {
       var links = document.querySelectorAll('.toc-link');
@@ -279,9 +307,58 @@ dist/                     # 构建输出（自动生成，不提交）
         }
         links.forEach(function(l) { l.classList.remove('toc-link--active'); });
         active.link.classList.add('toc-link--active');
+        // expand parent items so active link is visible
+        var parent = active.link.closest('.toc-item');
+        while (parent) {
+          parent.classList.remove('toc-collapsed');
+          parent = parent.parentElement ? parent.parentElement.closest('.toc-item') : null;
+        }
       }
       window.addEventListener('scroll', update);
       update();
+    })();
+
+    // toc context menu
+    (function() {
+      var toc = document.querySelector('[data-tab-content="toc"]');
+      var menu = document.getElementById('tocContextMenu');
+      if (!toc || !menu) return;
+
+      toc.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        menu.style.display = 'block';
+        menu.style.left = Math.min(e.clientX, window.innerWidth - 200) + 'px';
+        menu.style.top = e.clientY + 'px';
+      });
+
+      document.addEventListener('click', function() {
+        menu.style.display = 'none';
+      });
+
+      document.querySelectorAll('.toc-context-item').forEach(function(item) {
+        item.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var action = this.getAttribute('data-action');
+          var level = parseInt(this.getAttribute('data-level'));
+          menu.style.display = 'none';
+
+          var items = toc.querySelectorAll('.toc-item');
+          if (action === 'expand-all') {
+            items.forEach(function(it) { it.classList.remove('toc-collapsed'); });
+          } else if (action === 'collapse-all') {
+            items.forEach(function(it) { it.classList.add('toc-collapsed'); });
+          } else if (action === 'expand-level') {
+            items.forEach(function(it) {
+              var lvl = parseInt(it.getAttribute('data-level'));
+              if (lvl <= level) {
+                it.classList.remove('toc-collapsed');
+              } else {
+                it.classList.add('toc-collapsed');
+              }
+            });
+          }
+        });
+      });
     })();
   </script>
 
